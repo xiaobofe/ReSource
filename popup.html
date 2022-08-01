@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/element-ui.css">
+  <script type="text/javascript" src="lib/vue.js"></script>
+  <script type="text/javascript" src="lib/element-ui.js"></script>
+  <title>ReSource</title>
+  <style>
+    .el-link {
+      color: #67c23a;
+      display: block;
+      width: 100px;
+      font-size: 12px;
+    }
+
+    .el-collapse-item__content {
+      display: flex;
+      flex-direction: column;
+    }
+  </style>
+</head>
+
+<body style="width: 300px;">
+  <div id="popup">
+    <div v-if="show">
+      <div style="display: flex;">
+        <a href="options.html" class="el-link" target="_blank" tabIndex="-1">
+          <el-button type="text">管理项目</el-button>
+        </a>
+      </div>
+      <el-collapse v-model="activeNames">
+        <el-collapse-item v-for="(item, index) in settingJson" :name="item.name" v-if="item.options && item.options.length">
+          <template slot="title">
+            {{ item.name }}
+          </template>
+          <el-checkbox v-for="(option, indexOption) in item.options"
+            @change="handleSelectionChange(index, indexOption, arguments)" :checked="option.checked"
+            :label="option.origin" :key="option.origin">{{option.origin}}</el-checkbox>
+        </el-collapse-item>
+      </el-collapse>
+    </div>
+    <el-empty v-else>
+      <el-button type="primary">
+        <a href="options.html" class="el-link" style="color: #fff;" target="_blank" tabIndex="-1">
+          去添加
+        </a>
+      </el-button>
+    </el-empty>
+  </div>
+</body>
+<script type="text/javascript" type="module" src="lib/popup.js"></script>
+
+
+</html>

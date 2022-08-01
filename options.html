@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>ReSource</title>
+  <link rel="stylesheet" href="css/element-ui.css">
+  <script type="text/javascript" src="lib/vue.js"></script>
+  <script type="text/javascript" src="lib/element-ui.js"></script>
+  <style>
+    .box-card {
+      margin-bottom: 30px;
+    }
+    .header-name {
+      color: #409EFF;
+      font-weight: 800;
+      font-size: 30px;
+      line-height: 60px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <el-dialog title="管理项目" :visible.sync="dialogVisible" :before-close="handleClose">
+      <el-form ref="form" :model="dialogData" label-width="80px">
+        <el-form-item label="原始">
+          <el-input v-model="dialogData.origin"></el-input>
+        </el-form-item>
+        <el-form-item label="目标">
+          <el-input v-model="dialogData.target"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="handleClose">取 消</el-button>
+        <el-button type="primary" @click="handleDialogOk">确 定</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog title="新建项目" :visible.sync="dialogVisibleForCard" :before-close="handleCloseForCard">
+      <el-form ref="form" :model="newCardData" label-width="80px">
+        <el-form-item label="名称">
+          <el-input v-model="newCardData.name"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="handleCloseForCard">取 消</el-button>
+        <el-button type="primary" @click="handleDialogOkForCard">确 定</el-button>
+      </span>
+    </el-dialog>
+    <el-container v-if="settingJson.length">
+      <el-header style="text-align: right; font-size: 12px; line-height: 60px;">
+        <span class="header-name">ReSource</span>
+      </el-header>
+      <el-main>
+        <el-card v-for="(item, index) in settingJson" class="box-card">
+          <div slot="header" class="clearfix">
+            <span style="color: #409EFF; font-size: 15px; font-weight: 500;">{{ item.name }}</span>
+            <el-dropdown style="float: right; padding: 3px 0" @command="handleCommand(index, arguments)">
+              <i class="el-icon-setting" style="margin-right: 15px"></i>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item command="create">新增选项</el-dropdown-item>
+                <el-dropdown-item command="delete">删除项目</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+          </div>
+          <el-table :data="item.options" ref="multipleTable" tooltip-effect="dark" style="width: 100%"
+            @selection-change="handleSelectionChange(index, arguments)">
+            <el-table-column type="selection" width="55">
+            </el-table-column>
+            <el-table-column prop="origin" label="原始">
+            </el-table-column>
+            <el-table-column prop="target" label="目标">
+            </el-table-column>
+            <el-table-column fixed="right" label="操作" width="100">
+              <template slot-scope="scope">
+                <el-button type="text" @click="handleEditClick(scope, index)" size="small">编辑</el-button>
+                <el-button @click="handleDeleteClick(scope, index)" type="text" size="small">删除</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-card>
+        <div style="display: flex; justify-content: center;">
+          <el-button type="primary" @click="dialogVisibleForCard = true" round>新增项目</el-button>
+        </div>
+      </el-main>
+    </el-container>
+    <el-empty v-else>
+      <el-button type="primary" @click="dialogVisibleForCard = true" round>新增项目</el-button>
+    </el-empty>
+  </div>
+</body>
+<script type="text/javascript" type="module" src="lib/options.js"></script>
+
+</html>
