@@ -57,10 +57,10 @@ chrome.webRequest.onBeforeRequest.addListener(function (details) {
         const sources = ReSourceCache[i].options;
         for (let i = 0, len = sources.length; i < len; i++) {
             const reg = new RegExp(sources[i].origin, 'gi');
-            if (sources[i].checked && typeof sources[i].target === 'string' && reg.test(url)) {
+            if (sources[i].checked && typeof sources[i].target === 'string' && (reg.test(url) || sources[i].origin === url)) {
                 if (!/^file:\/\//.test(sources[i].target)) {
                     do {
-                        url = url.replace(reg, sources[i].target);
+                        url = sources[i].origin === url ? sources[i].target : url.replace(reg, sources[i].target);
                     } while (reg.test(url))
                 } else {
                     do {
